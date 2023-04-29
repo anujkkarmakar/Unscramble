@@ -31,7 +31,7 @@ class GameViewModelTest {
     @Test
     fun gameViewModel_IncorrectGuess_ErrorFlagSet() {
         // Given an incorrect word as input
-        var currentGameUiState = viewModel.uiState.value
+        val currentGameUiState = viewModel.uiState.value
         val incorrectPlayerWord = "and"
         viewModel.updateUserGuess(incorrectPlayerWord)
         viewModel.checkUserGuess()
