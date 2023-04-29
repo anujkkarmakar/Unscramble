@@ -32,12 +32,12 @@ class GameViewModelTest {
     @Test
     fun gameViewModel_IncorrectGuess_ErrorFlagSet() {
         // Given an incorrect word as input
-        val currentGameUiState = viewModel.uiState.value
         val incorrectPlayerWord = "and"
         viewModel.updateUserGuess(incorrectPlayerWord)
         viewModel.checkUserGuess()
+        val currentGameUiState = viewModel.uiState.value
         assertTrue(currentGameUiState.isGuessedWordWrong)
-        assertNotEquals(SCORE_AFTER_FIRST_CORRECT_ANSWER, currentGameUiState.score)
+        assertEquals(0, currentGameUiState.score)
     }
 
     @Test
@@ -73,5 +73,26 @@ class GameViewModelTest {
         assertEquals(MAX_NO_OF_WORDS, currentGameUiState.currentWordCount)
         // Assert that after 10 questions are answered, the game is over.
         assertTrue(currentGameUiState.isGameOver)
+    }
+
+    @Test
+    fun gameViewModel_WordSkipped_ScoreUnchangedAndWordCountIncreased() {
+        var currentGameUiState = viewModel.uiState.value
+        var currentPlayerWord = getUnscrambledWord(currentGameUiState.currentScrambledWord)
+        viewModel.updateUserGuess(currentPlayerWord)
+        viewModel.checkUserGuess()
+
+        currentGameUiState = viewModel.uiState.value
+        currentPlayerWord = currentGameUiState.currentScrambledWord
+        val lastWordCount = currentGameUiState.currentWordCount
+
+        viewModel.updateUserGuess(currentPlayerWord)
+        viewModel.checkUserGuess()
+        viewModel.skipWord()
+
+        currentGameUiState = viewModel.uiState.value
+
+        assertEquals(SCORE_AFTER_FIRST_CORRECT_ANSWER, currentGameUiState.score)
+        assertEquals(lastWordCount + 1, currentGameUiState.currentWordCount)
     }
 }
