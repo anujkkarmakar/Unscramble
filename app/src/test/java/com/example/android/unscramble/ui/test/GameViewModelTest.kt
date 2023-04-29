@@ -38,4 +38,19 @@ class GameViewModelTest {
         assertTrue(currentGameUiState.isGuessedWordWrong)
         assertNotEquals(SCORE_AFTER_FIRST_CORRECT_ANSWER, currentGameUiState.score)
     }
+
+    @Test
+    fun gameViewModel_Initialization_FirstWordLoaded() {
+        val currentGameUiState = viewModel.uiState.value
+        val unScrambledWord = getUnscrambledWord(currentGameUiState.currentScrambledWord)
+
+        assertNotEquals(unScrambledWord, currentGameUiState.currentScrambledWord)
+
+        assertEquals(currentGameUiState.score, 0)
+        assertEquals(currentGameUiState.isGuessedWordWrong, false)
+        assertEquals(currentGameUiState.isGameOver, false)
+        assertEquals(currentGameUiState.currentWordCount, 1)
+    }
+
+
 }
